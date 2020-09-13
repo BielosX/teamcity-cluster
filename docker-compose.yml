@@ -1,0 +1,32 @@
+version: "3.8"
+services:
+  teamcity-server:
+    image: jetbrains/teamcity-server:2020.1.4-linux
+    ports:
+    - 8111:8111
+    volumes:
+    - type: volume
+      source: teamcity-data
+      target: /data/teamcity_server/datadir
+  teamcity-agent:
+    image: jetbrains/teamcity-agent:2020.1.4-linux
+    deploy:
+      replicas: 3
+    environment:
+      SERVER_URL: "http://teamcity-server:8111"
+  postgres:
+    image: postgres:13-alpine
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_USER: root
+      POSTGRES_DB: teamcity
+    volumes:
+    - type: volume
+      source: postgres-data
+      target: /var/lib/postgresql/data
+
+volumes:
+  postgres-data:
+    driver: local
+  teamcity-data:
+    driver: local
