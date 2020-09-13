@@ -10,8 +10,6 @@ services:
       target: /data/teamcity_server/datadir
   teamcity-agent:
     image: jetbrains/teamcity-agent:2020.1.4-linux
-    deploy:
-      replicas: 3
     environment:
       SERVER_URL: "http://teamcity-server:8111"
   postgres:
